@@ -6,6 +6,16 @@ import matplotlib.animation
 import agentframework
 import csv
 import random
+import requests
+import bs4
+
+r = requests.get('http://www.geog.leeds.ac.uk/courses/computing/practicals/python/agent-framework/part9/data.html')
+content = r.text
+soup = bs4.BeautifulSoup(content, 'html.parser')
+td_ys = soup.find_all(attrs={"class" : "y"})
+td_xs = soup.find_all(attrs={"class" : "x"})
+print(td_ys)
+print(td_xs)
 
 # Set parameter limits
 num_of_agents = 10
@@ -33,7 +43,9 @@ f.close()
 
 # Starting positions
 for i in range(num_of_agents):
-    agents.append(agentframework.Agent(environment, agents, neighbourhood))
+    y = int(td_ys[i].text)
+    x = int(td_xs[i].text)
+    agents.append(agentframework.Agent(environment, agents, y, x))
 """print(agents)"""
 
 ax.set_autoscale_on(False),
